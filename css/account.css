@@ -1,0 +1,103 @@
+/* ── Account Pages ── */
+.account-page { padding: 0 0 80px; }
+
+/* ── Orders Table ── */
+.orders-table { width: 100%; border-collapse: collapse; }
+.orders-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.orders-table td {
+  padding: 16px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+.orders-table tr:last-child td { border-bottom: none; }
+.order-product-cell { display: flex; align-items: center; gap: 12px; }
+.order-product-img {
+  width: 48px; height: 48px;
+  border-radius: var(--radius);
+  object-fit: cover;
+  background: var(--gray-100);
+}
+.order-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.order-status.processing { background: #fef9c3; color: #854d0e; }
+.order-status.completed { background: #f0fdf4; color: #166534; }
+.order-status.failed { background: #fef2f2; color: #991b1b; }
+.order-view-btn { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+.order-view-btn:hover { color: var(--black); text-decoration: underline; }
+
+/* ── Empty State ── */
+.account-empty {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--gray-400);
+}
+.account-empty svg { width: 56px; height: 56px; margin: 0 auto 20px; }
+.account-empty h3 { font-size: 18px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px; }
+.account-empty p { font-size: 14px; margin-bottom: 24px; }
+
+/* ── Wishlist Grid ── */
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+}
+.wishlist-item img {
+  width: 64px; height: 64px;
+  border-radius: var(--radius);
+  object-fit: cover;
+  background: var(--gray-100);
+}
+.wishlist-item-info { flex: 1; }
+.wishlist-item-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.wishlist-item-date { font-size: 12px; color: var(--gray-400); margin-bottom: 8px; }
+.wishlist-item-price { font-size: 13px; color: var(--gray-500); margin-bottom: 8px; }
+.wishlist-item-actions { display: flex; gap: 8px; }
+.wishlist-item-actions .btn {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+/* ── Address Form ── */
+.address-form { display: flex; flex-direction: column; gap: 16px; max-width: 480px; }
+.address-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ── Password Form ── */
+.password-form { display: flex; flex-direction: column; gap: 16px; max-width: 360px; }
+
+/* ── Account Detail Form ── */
+.detail-form { display: flex; flex-direction: column; gap: 16px; max-width: 400px; }
+.detail-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+/* ── Save Button ── */
+.save-btn-row { margin-top: 8px; }
+
+@media (max-width: 768px) {
+  .wishlist-grid { grid-template-columns: 1fr; }
+  .address-form .form-row,
+  .detail-form-row { grid-template-columns: 1fr; }
+}

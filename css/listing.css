@@ -1,0 +1,161 @@
+/* ── Listing Layout ── */
+.listing-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  padding: 32px 0 64px;
+}
+
+/* ── Filter Sidebar ── */
+.filter-sidebar {
+  height: fit-content;
+}
+.filter-section {
+  border-bottom: 1px solid var(--gray-200);
+  padding: 20px 0;
+}
+.filter-section:first-child { padding-top: 0; }
+.filter-section:last-child { border-bottom: none; }
+.filter-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 14px;
+}
+.filter-list { display: flex; flex-direction: column; gap: 8px; }
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.filter-item:hover { color: var(--black); }
+.filter-item input[type="radio"],
+.filter-item input[type="checkbox"] {
+  accent-color: var(--black);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.filter-colors { display: flex; flex-wrap: wrap; gap: 10px; }
+.filter-color-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+.filter-color-btn.active,
+.filter-color-btn:hover { border-color: var(--black); outline: 2px solid var(--gray-300); outline-offset: 2px; }
+.filter-sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-price-range { display: flex; flex-direction: column; gap: 10px; }
+.price-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 3px;
+  background: var(--gray-300);
+  border-radius: 2px;
+  outline: none;
+}
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--black);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.price-display {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+/* ── Listing Main ── */
+.listing-main {}
+.listing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.listing-count {
+  font-size: 13.5px;
+  color: var(--gray-500);
+}
+.listing-count strong { color: var(--black); }
+.sort-select {
+  padding: 8px 14px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 13.5px;
+  color: var(--black);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.sort-select:focus { border-color: var(--black); }
+
+/* ── Applied Filters ── */
+.applied-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.applied-filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--gray-100);
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+.applied-filter-tag button {
+  color: var(--gray-400);
+  font-size: 14px;
+  line-height: 1;
+  transition: color var(--transition);
+}
+.applied-filter-tag button:hover { color: var(--black); }
+
+/* ── Listing Grid ── */
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ── No Results ── */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 24px;
+  color: var(--gray-400);
+}
+.no-results svg { width: 48px; height: 48px; margin: 0 auto 16px; }
+.no-results h3 { font-size: 18px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px; }
+.no-results p { font-size: 14px; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .listing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .listing-layout { grid-template-columns: 1fr; }
+  .filter-sidebar { display: none; }
+  .filter-sidebar.mobile-open { display: block; }
+}

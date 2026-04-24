@@ -1,0 +1,109 @@
+/* ── Auth Pages ── */
+.auth-page {
+  min-height: calc(100vh - var(--nav-height) - var(--announce-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: var(--gray-50);
+}
+
+.auth-box {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-header { margin-bottom: 28px; }
+.auth-header h1 {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+.auth-header p { font-size: 14px; color: var(--gray-500); }
+
+.auth-google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 24px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-700);
+  background: var(--white);
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-bottom: 20px;
+}
+.auth-google-btn:hover { border-color: var(--gray-400); background: var(--gray-50); }
+.auth-google-btn svg { width: 18px; height: 18px; }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: var(--gray-400);
+  font-size: 13px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--gray-200);
+}
+
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+
+.auth-forgot {
+  text-align: right;
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-top: -8px;
+}
+.auth-forgot a:hover { color: var(--black); text-decoration: underline; }
+
+.auth-form .btn-primary {
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13.5px;
+  color: var(--gray-500);
+}
+.auth-footer a { color: var(--black); font-weight: 600; }
+.auth-footer a:hover { text-decoration: underline; }
+
+.auth-terms {
+  font-size: 12px;
+  color: var(--gray-400);
+  text-align: center;
+  margin-top: 16px;
+  line-height: 1.6;
+}
+.auth-terms a { color: var(--gray-600); text-decoration: underline; }
+
+.auth-info-box {
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 13.5px;
+  color: var(--gray-600);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
