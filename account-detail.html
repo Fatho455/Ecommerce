@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account – Account Detail – Ecommerce</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/account.css" />
+</head>
+<body>
+  <div class="page-wrapper">
+    <div id="navbar-placeholder"></div>
+
+    <main>
+      <div class="page-header">
+        <div class="container">
+          <nav class="breadcrumb">
+            <a href="index.html">Ecommerce</a>
+            <span>›</span>
+            <span>My Account</span>
+          </nav>
+        </div>
+      </div>
+
+      <div class="container account-page">
+        <h1 style="font-family:var(--font-serif);font-size:28px;font-weight:400;padding:24px 0 0;">My Account</h1>
+        <div class="account-layout" id="account-layout"></div>
+      </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+  </div>
+
+  <script src="js/store/cart.store.js"></script>
+  <script src="js/store/wishlist.store.js"></script>
+  <script src="js/store/auth.store.js"></script>
+  <script src="js/global.js"></script>
+  <script src="js/account-sidebar.js"></script>
+  <script src="js/account.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      requireAuth();
+      const user = getUser();
+      const layout = document.getElementById("account-layout");
+      layout.innerHTML = renderAccountSidebar("detail") + `
+        <div class="account-content">
+          <h2>Account Details</h2>
+          <div class="detail-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+            <!-- Left: basic info -->
+            <form class="detail-form" onsubmit="saveDetail(event)">
+              <div class="form-group">
+                <label class="form-label">Full name</label>
+                <input type="text" class="form-input" id="detail-name" value="${user?.name || ""}" placeholder="John Doe" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="detail-email" value="${user?.email || ""}" placeholder="you@example.com" />
+              </div>
+              <div class="save-btn-row">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+            <!-- Right: profile picture placeholder -->
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">Profile Picture</div>
+              <div style="width:96px;height:96px;border-radius:50%;background:var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:var(--gray-500);margin-bottom:16px;">
+                ${(user?.name || "U")[0].toUpperCase()}
+              </div>
+              <button class="btn btn-outline" style="font-size:13px;padding:8px 16px;">Change Photo</button>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    function saveDetail(e) {
+      e.preventDefault();
+      const name = document.getElementById("detail-name").value.trim();
+      const email = document.getElementById("detail-email").value.trim();
+      updateUserField({ name, email });
+      showToast("Account details saved!", "success");
+    }
+  </script>
+</body>
+</html>
