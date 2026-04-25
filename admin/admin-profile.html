@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Profile</title>
+  <link rel="stylesheet" href="css/admin.css" />
+  <style>
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .profile-card {
+      background: var(--admin-white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .profile-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--admin-gray-100);
+    }
+    .profile-card p {
+      font-size: 13px;
+      color: var(--admin-gray-500);
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+    .profile-form { display: flex; flex-direction: column; gap: 16px; }
+    .profile-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--admin-black);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .current-email-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--admin-blue-light);
+      color: var(--admin-blue);
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .profile-save-btn {
+      background: var(--admin-black);
+      color: white;
+      padding: 11px 24px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      width: fit-content;
+      transition: background var(--transition);
+      margin-top: 4px;
+    }
+    .profile-save-btn:hover { background: #1a2332; }
+    .password-strength {
+      height: 4px;
+      background: var(--admin-gray-100);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .password-strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .strength-label {
+      font-size: 11px;
+      margin-top: 4px;
+    }
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--admin-blue-light);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--admin-blue);
+      margin-bottom: 20px;
+    }
+    .info-box svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <div id="sidebar-placeholder"></div>
+    <div class="admin-main">
+      <div id="topbar-placeholder"></div>
+      <div class="admin-content">
+
+        <!-- Page Title -->
+        <div style="margin-bottom:4px;">
+          <h1 style="font-size:20px;font-weight:700;">Admin Profile</h1>
+          <p style="font-size:13.5px;color:var(--admin-gray-500);margin-top:4px;">Manage your admin account credentials.</p>
+        </div>
+
+        <div class="profile-grid">
+
+          <!-- ── Change Email ── -->
+          <div class="profile-card">
+            <div class="profile-avatar" id="avatar-letter">A</div>
+            <h3>Change Email</h3>
+            <p>Update the email address used to log in to the admin panel.</p>
+
+            <div class="info-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path stroke-linecap="round" d="M12 8v4m0 4h.01"/>
+              </svg>
+              Current email: <strong id="current-email-display" style="margin-left:4px;">—</strong>
+            </div>
+
+            <form class="profile-form" onsubmit="changeEmail(event)">
+              <div class="admin-form-group">
+                <label class="admin-form-label">New Email</label>
+                <input type="email" class="admin-form-input" id="new-email"
+                  placeholder="newemail@admin.com" required />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Confirm Password</label>
+                <input type="password" class="admin-form-input" id="email-confirm-pass"
+                  placeholder="Enter current password to confirm" required />
+              </div>
+              <button type="submit" class="profile-save-btn">Update Email</button>
+            </form>
+          </div>
+
+          <!-- ── Change Password ── -->
+          <div class="profile-card">
+            <h3>Change Password</h3>
+            <p>Choose a strong password to keep your admin account secure.</p>
+
+            <form class="profile-form" onsubmit="changePassword(event)">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Current Password</label>
+                <input type="password" class="admin-form-input" id="current-pass"
+                  placeholder="••••••••" required />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">New Password</label>
+                <input type="password" class="admin-form-input" id="new-pass"
+                  placeholder="••••••••" minlength="6" required
+                  oninput="checkStrength(this.value)" />
+                <div class="password-strength">
+                  <div class="password-strength-fill" id="strength-bar" style="width:0%;background:#dc2626;"></div>
+                </div>
+                <span class="strength-label" id="strength-label" style="color:var(--admin-gray-400);">Enter a password</span>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Confirm New Password</label>
+                <input type="password" class="admin-form-input" id="confirm-pass"
+                  placeholder="••••••••" minlength="6" required />
+              </div>
+              <button type="submit" class="profile-save-btn">Update Password</button>
+            </form>
+          </div>
+
+        </div>
+
+        <!-- ── Danger Zone ── -->
+        <div style="margin-top:24px;padding:20px 24px;background:white;border-radius:var(--radius-lg);border:1.5px solid #fecaca;box-shadow:var(--shadow-sm);">
+          <h3 style="font-size:14px;font-weight:700;color:var(--admin-error);margin-bottom:6px;">Danger Zone</h3>
+          <p style="font-size:13px;color:var(--admin-gray-500);margin-bottom:14px;">Reset all admin credentials back to default. This cannot be undone.</p>
+          <button onclick="resetToDefault()" style="padding:9px 20px;background:var(--admin-error);color:white;border-radius:var(--radius);font-size:13.5px;font-weight:600;transition:background 0.18s;">
+            Reset to Default Credentials
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-auth.js"></script>
+  <script src="js/admin-global.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      requireAdminAuth();
+      document.getElementById("sidebar-placeholder").innerHTML = renderAdminSidebar("profile");
+      document.getElementById("topbar-placeholder").innerHTML = renderAdminTopbar("Admin Profile");
+
+      // Show current email
+      const admin = JSON.parse(localStorage.getItem("ec_admin") || "{}");
+      const email = admin.email || "admin@admin.com";
+      document.getElementById("current-email-display").textContent = email;
+      document.getElementById("avatar-letter").textContent = email[0].toUpperCase();
+    });
+
+    function changeEmail(e) {
+      e.preventDefault();
+      const newEmail = document.getElementById("new-email").value.trim();
+      const confirmPass = document.getElementById("email-confirm-pass").value;
+      const admin = JSON.parse(localStorage.getItem("ec_admin") || "{}");
+
+      // Verify password
+      const stored = JSON.parse(localStorage.getItem("ec_admin_creds") || '{"password":"admin123"}');
+      if (confirmPass !== stored.password) {
+        adminToast("Incorrect current password.", "error");
+        return;
+      }
+
+      // Update email
+      admin.email = newEmail;
+      localStorage.setItem("ec_admin", JSON.stringify(admin));
+      localStorage.setItem("ec_admin_creds", JSON.stringify({ ...stored, email: newEmail }));
+
+      document.getElementById("current-email-display").textContent = newEmail;
+      document.getElementById("avatar-letter").textContent = newEmail[0].toUpperCase();
+      adminToast("Email updated successfully!", "success");
+      e.target.reset();
+    }
+
+    function changePassword(e) {
+      e.preventDefault();
+      const currentPass = document.getElementById("current-pass").value;
+      const newPass = document.getElementById("new-pass").value;
+      const confirmPass = document.getElementById("confirm-pass").value;
+
+      const stored = JSON.parse(localStorage.getItem("ec_admin_creds") || '{"password":"admin123"}');
+
+      if (currentPass !== stored.password) {
+        adminToast("Current password is incorrect.", "error");
+        return;
+      }
+      if (newPass !== confirmPass) {
+        adminToast("New passwords do not match.", "error");
+        return;
+      }
+      if (newPass.length < 6) {
+        adminToast("Password must be at least 6 characters.", "error");
+        return;
+      }
+
+      localStorage.setItem("ec_admin_creds", JSON.stringify({ ...stored, password: newPass }));
+      adminToast("Password updated successfully!", "success");
+      e.target.reset();
+      document.getElementById("strength-bar").style.width = "0%";
+      document.getElementById("strength-label").textContent = "Enter a password";
+    }
+
+    function checkStrength(val) {
+      const bar = document.getElementById("strength-bar");
+      const label = document.getElementById("strength-label");
+      let score = 0;
+      if (val.length >= 6) score++;
+      if (val.length >= 10) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^a-zA-Z0-9]/.test(val)) score++;
+
+      const levels = [
+        { pct: "20%", color: "#dc2626", text: "Very Weak" },
+        { pct: "40%", color: "#f97316", text: "Weak" },
+        { pct: "60%", color: "#eab308", text: "Fair" },
+        { pct: "80%", color: "#22c55e", text: "Strong" },
+        { pct: "100%", color: "#16a34a", text: "Very Strong" },
+      ];
+      const level = levels[Math.max(0, score - 1)] || levels[0];
+      bar.style.width = val.length === 0 ? "0%" : level.pct;
+      bar.style.background = level.color;
+      label.textContent = val.length === 0 ? "Enter a password" : level.text;
+      label.style.color = val.length === 0 ? "var(--admin-gray-400)" : level.color;
+    }
+
+    function resetToDefault() {
+      if (!confirm("Reset admin email to admin@admin.com and password to admin123?")) return;
+      localStorage.setItem("ec_admin_creds", JSON.stringify({ email: "admin@admin.com", password: "admin123" }));
+      const admin = JSON.parse(localStorage.getItem("ec_admin") || "{}");
+      admin.email = "admin@admin.com";
+      localStorage.setItem("ec_admin", JSON.stringify(admin));
+      document.getElementById("current-email-display").textContent = "admin@admin.com";
+      document.getElementById("avatar-letter").textContent = "A";
+      adminToast("Credentials reset to default.", "info");
+    }
+  </script>
+</body>
+</html>

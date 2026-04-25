@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Product</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="admin-layout">
+    <div id="sidebar-placeholder"></div>
+    <div class="admin-main">
+      <div id="topbar-placeholder"></div>
+      <div class="admin-content">
+        <div class="add-product-form">
+          <h2 id="form-title">Add Product</h2>
+          <div class="add-product-grid">
+            <!-- Left Column -->
+            <div style="display:flex;flex-direction:column;gap:20px;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Title</label>
+                <input type="text" class="admin-form-input" id="p-title" placeholder="Product name" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Price</label>
+                <input type="number" class="admin-form-input" id="p-price" placeholder="0.00" min="0" step="0.01" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Category</label>
+                <input type="text" class="admin-form-input" id="p-category" placeholder="e.g. T-shirt, Men" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Slug</label>
+                <input type="text" class="admin-form-input" id="p-slug" placeholder="product-slug" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">SKU</label>
+                <input type="text" class="admin-form-input" id="p-sku" placeholder="47514501" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Description</label>
+                <textarea class="admin-form-input" id="p-description" placeholder="Product description…"></textarea>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div style="display:flex;flex-direction:column;gap:20px;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Stock status</label>
+                <select class="admin-form-input" id="p-stock">
+                  <option value="In Stock">In Stock</option>
+                  <option value="Out of Stock">Out of Stock</option>
+                  <option value="Low Stock">Low Stock</option>
+                </select>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Available quantity</label>
+                <input type="number" class="admin-form-input" id="p-qty" placeholder="100" min="0" />
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Images</label>
+                <div class="image-upload-area" onclick="document.getElementById('img-input').click()">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path stroke-linecap="round" d="M21 15l-5-5L5 21"/></svg>
+                  Choose product images
+                </div>
+                <input type="file" id="img-input" multiple accept="image/*" style="display:none" onchange="handleImageUpload(event)" />
+                <div class="image-previews" id="image-previews">
+                  <div class="image-preview-item">
+                    <img src="https://placehold.co/60x60/1a1a1a/fff?text=T" />
+                    <span class="image-preview-remove" onclick="this.parentElement.remove()">✕</span>
+                  </div>
+                  <div class="image-preview-item" style="border:2px solid var(--admin-gray-300);border-radius:6px;">
+                    <img src="https://placehold.co/60x60/e5e7eb/555?text=T" />
+                    <span class="image-preview-remove" onclick="this.parentElement.remove()">✕</span>
+                  </div>
+                  <div class="image-preview-item">
+                    <img src="https://placehold.co/60x60/78350f/fff?text=T" />
+                    <span class="image-preview-remove" onclick="this.parentElement.remove()">✕</span>
+                  </div>
+                </div>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Colors</label>
+                <div class="add-product-colors" id="color-swatches">
+                  <button type="button" class="add-color-swatch active" style="background:#93c5fd;" data-color="#93c5fd" onclick="toggleColor(this)"></button>
+                  <button type="button" class="add-color-swatch" style="background:#fcd34d;" data-color="#fcd34d" onclick="toggleColor(this)"></button>
+                  <button type="button" class="add-color-swatch active" style="background:#4ade80;" data-color="#4ade80" onclick="toggleColor(this)"></button>
+                  <button type="button" class="add-color-swatch active" style="background:#2563eb;" data-color="#2563eb" onclick="toggleColor(this)"></button>
+                  <button type="button" class="add-color-swatch" style="background:#0a0a0a;" data-color="#0a0a0a" onclick="toggleColor(this)"></button>
+                  <button type="button" class="add-color-swatch" style="background:#f3f4f6;border:1.5px solid #d1d5db;" data-color="#f3f4f6" onclick="toggleColor(this)"></button>
+                </div>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Sizes</label>
+                <div class="add-product-sizes" id="size-btns">
+                  <button type="button" class="add-size-btn" data-size="S" onclick="toggleSize(this)">S</button>
+                  <button type="button" class="add-size-btn active" data-size="M" onclick="toggleSize(this)">M</button>
+                  <button type="button" class="add-size-btn active" data-size="X" onclick="toggleSize(this)">X</button>
+                  <button type="button" class="add-size-btn active" data-size="XL" onclick="toggleSize(this)">XL</button>
+                  <button type="button" class="add-size-btn" data-size="XXL" onclick="toggleSize(this)">XXL</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="add-product-btn" onclick="saveProduct()">Save Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-auth.js"></script>
+  <script src="js/admin-global.js"></script>
+  <script>
+    let editId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      requireAdminAuth();
+      seedAdminData();
+      document.getElementById("sidebar-placeholder").innerHTML = renderAdminSidebar("products");
+      document.getElementById("topbar-placeholder").innerHTML = renderAdminTopbar("Products");
+
+      const params = new URLSearchParams(window.location.search);
+      editId = params.get("edit");
+      if (editId) {
+        document.getElementById("form-title").textContent = "Edit Product";
+        loadEditProduct(editId);
+      }
+    });
+
+    function loadEditProduct(id) {
+      const products = JSON.parse(localStorage.getItem("ec_admin_products") || "[]");
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById("p-title").value = p.name || "";
+      document.getElementById("p-price").value = p.price || "";
+      document.getElementById("p-category").value = p.category || "";
+      document.getElementById("p-slug").value = p.id || "";
+      document.getElementById("p-sku").value = p.sku || "";
+      document.getElementById("p-stock").value = p.stock || "In Stock";
+      document.getElementById("p-qty").value = p.qty || "";
+      document.getElementById("p-description").value = p.description || "";
+    }
+
+    function toggleColor(btn) { btn.classList.toggle("active"); }
+    function toggleSize(btn) { btn.classList.toggle("active"); }
+
+    function handleImageUpload(event) {
+      const files = Array.from(event.target.files);
+      const preview = document.getElementById("image-previews");
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement("div");
+          div.className = "image-preview-item";
+          div.innerHTML = `<img src="${e.target.result}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;"/>
+            <span class="image-preview-remove" onclick="this.parentElement.remove()">✕</span>`;
+          preview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function saveProduct() {
+      const name = document.getElementById("p-title").value.trim();
+      const price = parseFloat(document.getElementById("p-price").value);
+      const category = document.getElementById("p-category").value.trim();
+      const slug = document.getElementById("p-slug").value.trim() || name.toLowerCase().replace(/\s+/g, "-");
+      const sku = document.getElementById("p-sku").value.trim() || "47514501";
+      const stock = document.getElementById("p-stock").value;
+      const qty = document.getElementById("p-qty").value;
+      const description = document.getElementById("p-description").value.trim();
+
+      if (!name || isNaN(price) || price <= 0) {
+        adminToast("Please fill in Title and Price.", "error");
+        return;
+      }
+
+      const selectedColors = [...document.querySelectorAll(".add-color-swatch.active")].map(b => b.dataset.color);
+      const selectedSizes = [...document.querySelectorAll(".add-size-btn.active")].map(b => b.dataset.size);
+
+      const products = JSON.parse(localStorage.getItem("ec_admin_products") || "[]");
+      if (editId) {
+        const idx = products.findIndex(p => p.id === editId);
+        if (idx !== -1) {
+          products[idx] = { ...products[idx], name, price, category, id: slug, sku, stock, qty, description, colors: selectedColors, sizes: selectedSizes };
+        }
+      } else {
+        products.unshift({
+          id: slug + "-" + Date.now(),
+          name, price, category, sku, stock, qty, description,
+          colors: selectedColors, sizes: selectedSizes,
+          image: `https://placehold.co/38x38/1a1a1a/fff?text=${name[0]}`
+        });
+      }
+      localStorage.setItem("ec_admin_products", JSON.stringify(products));
+      adminToast(editId ? "Product updated!" : "Product saved!", "success");
+      setTimeout(() => window.location.href = "products.html", 900);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders</title>
+  <link rel="stylesheet" href="css/admin.css" />
+  <style>
+    .detail-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .detail-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .detail-modal {
+      background: white; border-radius: 12px;
+      width: 100%; max-width: 560px; max-height: 85vh;
+      overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.16);
+      transform: translateY(-12px); transition: transform 0.25s ease;
+    }
+    .detail-modal-overlay.open .detail-modal { transform: translateY(0); }
+    .detail-modal-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid var(--admin-gray-100);
+      position: sticky; top: 0; background: white; z-index: 1;
+      border-radius: 12px 12px 0 0;
+    }
+    .detail-modal-head h3 { font-size: 16px; font-weight: 700; }
+    .detail-modal-close {
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      border-radius: 6px; color: var(--admin-gray-400); font-size: 18px; cursor: pointer;
+      transition: all 0.18s;
+    }
+    .detail-modal-close:hover { background: var(--admin-gray-100); color: var(--admin-black); }
+    .detail-modal-body { padding: 24px; }
+    .order-detail-section {
+      background: var(--admin-gray-50);
+      border-radius: 8px; padding: 18px; margin-bottom: 20px;
+    }
+    .order-detail-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--admin-gray-400);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+    }
+    .order-detail-section-title svg { width: 13px; height: 13px; }
+    .detail-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; border-bottom: 1px solid var(--admin-gray-200);
+      font-size: 13.5px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row span:first-child { color: var(--admin-gray-500); }
+    .detail-row span:last-child { font-weight: 500; color: var(--admin-black); }
+    .order-items-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .order-item-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; background: var(--admin-gray-50);
+      border-radius: 8px;
+    }
+    .order-item-row img {
+      width: 44px; height: 44px; border-radius: 6px;
+      object-fit: cover; background: var(--admin-gray-100);
+    }
+    .order-item-name { font-size: 13.5px; font-weight: 500; }
+    .order-item-meta { font-size: 12px; color: var(--admin-gray-400); margin-top: 2px; }
+    .order-total-row {
+      display: flex; justify-content: space-between;
+      padding: 14px 16px; background: var(--admin-black);
+      border-radius: 8px; color: white;
+      font-size: 14px; font-weight: 700;
+    }
+    .customer-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 14px; background: var(--admin-blue-light);
+      border-radius: 8px; margin-bottom: 16px; width: 100%;
+    }
+    .customer-badge-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--admin-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .customer-badge-name { font-size: 13.5px; font-weight: 600; color: var(--admin-black); }
+    .customer-badge-email { font-size: 12px; color: var(--admin-gray-500); }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <div id="sidebar-placeholder"></div>
+    <div class="admin-main">
+      <div id="topbar-placeholder"></div>
+      <div class="admin-content">
+        <div class="admin-table-wrap">
+          <div class="admin-table-header">
+            <h2>Orders</h2>
+            <div class="admin-search">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input type="text" id="order-search" placeholder="Search orders"
+                oninput="searchOrders(this.value)" />
+            </div>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th><button class="admin-sort-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></button></th>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody"></tbody>
+          </table>
+          <div class="admin-pagination" id="orders-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="detail-modal-overlay" id="order-modal" onclick="handleModalBg(event)">
+    <div class="detail-modal">
+      <div class="detail-modal-head">
+        <h3 id="modal-order-id">Order Details</h3>
+        <button class="detail-modal-close" onclick="closeOrderModal()">✕</button>
+      </div>
+      <div class="detail-modal-body" id="order-modal-body"></div>
+    </div>
+  </div>
+
+  <script src="js/admin-auth.js"></script>
+  <script src="js/admin-global.js"></script>
+  <script src="js/orders.js"></script>
+  <script>
+    // Override the action button render in orders.js
+    const _origRender = window.renderOrders;
+
+    function openOrderModal(orderId) {
+      const orders = JSON.parse(localStorage.getItem("ec_orders") || "[]");
+      const users = JSON.parse(localStorage.getItem("ec_users") || "[]");
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      // Try to find matching customer
+      const customer = users.find(u =>
+        u.email === order.email || u.name === order.name
+      );
+
+      const initials = customer
+        ? customer.name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)
+        : (order.name || "?")[0].toUpperCase();
+
+      document.getElementById("modal-order-id").textContent = `Order ${order.id}`;
+      document.getElementById("order-modal-body").innerHTML = `
+
+        <!-- Customer Info -->
+        <div class="customer-badge">
+          <div class="customer-badge-avatar">${initials}</div>
+          <div>
+            <div class="customer-badge-name">${customer?.name || order.name || "Guest"}</div>
+            <div class="customer-badge-email">${customer?.email || order.email || "—"}</div>
+          </div>
+          <span class="status-badge ${(order.status || "").toLowerCase()}"
+            style="margin-left:auto;">${order.status}</span>
+        </div>
+
+        <!-- Order Info -->
+        <div class="order-detail-section">
+          <div class="order-detail-section-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path stroke-linecap="round" d="M8 7h8M8 12h5"/>
+            </svg>
+            Order Information
+          </div>
+          <div class="detail-row"><span>Order ID</span><span>${order.id}</span></div>
+          <div class="detail-row"><span>Date</span><span>${order.date}</span></div>
+          <div class="detail-row"><span>Status</span>
+            <span class="status-badge ${(order.status || "").toLowerCase()}">${order.status}</span>
+          </div>
+          <div class="detail-row"><span>Items</span><span>${order.items?.length || 1} item(s)</span></div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="order-detail-section">
+          <div class="order-detail-section-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Shipping Address
+          </div>
+          ${order.address ? `
+            <div class="detail-row"><span>Street</span><span>${order.address.street || "—"}</span></div>
+            <div class="detail-row"><span>City</span><span>${order.address.city || "—"}</span></div>
+            <div class="detail-row"><span>State</span><span>${order.address.state || "—"}</span></div>
+            <div class="detail-row"><span>Zip Code</span><span>${order.address.zip || "—"}</span></div>
+            <div class="detail-row"><span>Country</span><span>${order.address.country || "—"}</span></div>
+          ` : `
+            ${customer?.address ? `
+              <div class="detail-row"><span>Street</span><span>${customer.address.street || "—"}</span></div>
+              <div class="detail-row"><span>City</span><span>${customer.address.city || "—"}</span></div>
+              <div class="detail-row"><span>State</span><span>${customer.address.state || "—"}</span></div>
+              <div class="detail-row"><span>Zip Code</span><span>${customer.address.zip || "—"}</span></div>
+              <div class="detail-row"><span>Country</span><span>${customer.address.country || "—"}</span></div>
+            ` : `<div class="detail-row"><span>Address</span><span>—</span></div>`}
+          `}
+        </div>
+
+        <!-- Items -->
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;
+          color:var(--admin-gray-400);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <svg fill="none" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+          </svg>
+          Items Ordered
+        </div>
+        <div class="order-items-list">
+          ${(order.items || []).map(item => `
+            <div class="order-item-row">
+              <img src="${item.image || "https://placehold.co/44x44/f3f3f3/aaa?text=?"}"
+                onerror="this.src='https://placehold.co/44x44/f3f3f3/aaa?text=?'" />
+              <div style="flex:1;">
+                <div class="order-item-name">${item.name || "Product"}</div>
+                <div class="order-item-meta">
+                  ${item.color ? "Color: " + item.color : ""}
+                  ${item.size ? " · Size: " + item.size : ""}
+                  ${item.qty ? " · Qty: " + item.qty : ""}
+                </div>
+              </div>
+              <div style="font-weight:600;font-size:13.5px;">
+                ${item.price ? (item.price * (item.qty || 1)).toFixed(2) + " DA" : "—"}
+              </div>
+            </div>`).join("")}
+        </div>
+
+        <!-- Total -->
+        <div class="order-total-row">
+          <span>Total</span>
+          <span>${(order.total || 0).toFixed(2)} DA</span>
+        </div>
+      `;
+
+      document.getElementById("order-modal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeOrderModal() {
+      document.getElementById("order-modal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function handleModalBg(e) {
+      if (e.target === e.currentTarget) closeOrderModal();
+    }
+
+    // Override renderOrders to add View button
+    document.addEventListener("DOMContentLoaded", () => {
+      requireAdminAuth();
+      seedAdminData();
+      document.getElementById("sidebar-placeholder").innerHTML = renderAdminSidebar("orders");
+      document.getElementById("topbar-placeholder").innerHTML = renderAdminTopbar("Orders");
+
+      // Patch renderOrders to include View button
+      const ORD_PAGE_SIZE = 8;
+      window.allOrders = JSON.parse(localStorage.getItem("ec_orders") || "[]");
+      window.filteredOrders = [...window.allOrders];
+      window.ordPage = 1;
+
+      window.renderOrders = function() {
+        const tbody = document.getElementById("orders-tbody");
+        const start = (ordPage - 1) * ORD_PAGE_SIZE;
+        const paged = filteredOrders.slice(start, start + ORD_PAGE_SIZE);
+
+        if (paged.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="admin-no-results">No orders found.</td></tr>`;
+        } else {
+          tbody.innerHTML = paged.map(o => `
+            <tr>
+              <td><img class="admin-table-img"
+                src="${o.items[0]?.image || "https://placehold.co/38x38/f3f3f3/aaa?text=?"}"
+                onerror="this.src='https://placehold.co/38x38/f3f3f3/aaa?text=?'" /></td>
+              <td>
+                <div style="font-weight:500;">${o.items[0]?.name || "Order"}</div>
+                <div style="font-size:11px;color:var(--admin-gray-400);">${o.id}</div>
+              </td>
+              <td style="color:var(--admin-gray-500);">${o.date}</td>
+              <td style="font-weight:600;">${(o.total || 0).toFixed(2)} DA</td>
+              <td>
+                <select onchange="updateOrderStatus('${o.id}', this.value)"
+                  style="padding:4px 8px;border:1.5px solid var(--admin-gray-200);
+                    border-radius:20px;font-size:12px;font-weight:600;
+                    background:white;cursor:pointer;">
+                  <option value="Processing" ${o.status==="Processing"?"selected":""}>Processing</option>
+                  <option value="Completed" ${o.status==="Completed"?"selected":""}>Completed</option>
+                  <option value="Cancelled" ${o.status==="Cancelled"?"selected":""}>Cancelled</option>
+                  <option value="Failed" ${o.status==="Failed"?"selected":""}>Failed</option>
+                </select>
+              </td>
+              <td>
+                <button onclick="openOrderModal('${o.id}')"
+                  style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+                    background:var(--admin-blue-light);color:var(--admin-blue);
+                    border-radius:6px;font-size:12.5px;font-weight:600;
+                    border:none;cursor:pointer;transition:all 0.18s;"
+                  onmouseover="this.style.background='#dbeafe'"
+                  onmouseout="this.style.background='var(--admin-blue-light)'">
+                  <svg fill="none" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                  View
+                </button>
+              </td>
+            </tr>`).join("");
+        }
+        renderAdminPagination("orders-pagination", filteredOrders.length, ORD_PAGE_SIZE, ordPage, "ordGoToPage");
+      };
+
+      window.searchOrders = function(q) {
+        const query = q.toLowerCase();
+        filteredOrders = query
+          ? allOrders.filter(o =>
+              (o.items[0]?.name || "").toLowerCase().includes(query) ||
+              o.id.toLowerCase().includes(query))
+          : [...allOrders];
+        ordPage = 1;
+        renderOrders();
+      };
+
+      window.ordGoToPage = function(page) {
+        const pages = Math.ceil(filteredOrders.length / ORD_PAGE_SIZE);
+        if (page < 1 || page > pages) return;
+        ordPage = page;
+        renderOrders();
+      };
+
+      renderOrders();
+    });
+  </script>
+</body>
+</html>

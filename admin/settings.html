@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="admin-layout">
+    <div id="sidebar-placeholder"></div>
+    <div class="admin-main">
+      <div id="topbar-placeholder"></div>
+      <div class="admin-content">
+        <div class="admin-table-wrap" style="padding:32px;">
+          <h2 style="font-size:18px;font-weight:700;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--admin-gray-100);">Settings</h2>
+          <div class="settings-form">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Site Name</label>
+              <input type="text" class="admin-form-input" id="s-name" placeholder="Ecommerce" style="max-width:360px;" />
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Support Email</label>
+              <input type="email" class="admin-form-input" id="s-email" placeholder="hello@ecommerce.com" style="max-width:360px;" />
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Monthly Order Goal</label>
+              <input type="number" class="admin-form-input" id="s-goal" placeholder="1000" min="1" style="max-width:360px;" />
+            </div>
+            <button class="settings-save-btn" onclick="saveSettings()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-auth.js"></script>
+  <script src="js/admin-global.js"></script>
+  <script>
+    function loadSettings() {
+      const s = JSON.parse(localStorage.getItem("ec_settings") || "{}");
+      document.getElementById("s-name").value = s.siteName || "Ecommerce";
+      document.getElementById("s-email").value = s.supportEmail || "hello@ecommerce.com";
+      document.getElementById("s-goal").value = s.monthlyGoal || 1000;
+    }
+
+    function saveSettings() {
+      const settings = {
+        siteName: document.getElementById("s-name").value.trim(),
+        supportEmail: document.getElementById("s-email").value.trim(),
+        monthlyGoal: parseInt(document.getElementById("s-goal").value) || 1000,
+      };
+      localStorage.setItem("ec_settings", JSON.stringify(settings));
+      adminToast("Settings saved!", "success");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      requireAdminAuth();
+      seedAdminData();
+      document.getElementById("sidebar-placeholder").innerHTML = renderAdminSidebar("settings");
+      document.getElementById("topbar-placeholder").innerHTML = renderAdminTopbar("Settings");
+      loadSettings();
+    });
+  </script>
+</body>
+</html>

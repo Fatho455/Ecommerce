@@ -37,7 +37,7 @@ function renderNavbar() {
       <div class="container navbar-inner">
         <a href="index.html" class="nav-logo">
           <div class="nav-logo-icon">E</div>
-          Ecommerce
+          LuxStore
         </a>
         <ul class="nav-links">
           <li><a href="index.html" class="${page === "index.html" ? "active" : ""}">Home</a></li>
@@ -122,7 +122,7 @@ function renderFooter() {
             <div class="footer-brand">
               <a href="index.html" class="nav-logo" style="display:inline-flex;">
                 <div class="nav-logo-icon">E</div>
-                Ecommerce
+                LuxStore
               </a>
               <p>DevCut is a YouTube channel for practical project-based learning.</p>
               <div class="footer-social">
