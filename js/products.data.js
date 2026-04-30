@@ -1,5 +1,9 @@
-const PRODUCTS = [
-  {
+// ── Unified Product Store ──
+// Single source of truth: localStorage "ec_products"
+// Falls back to DEFAULT_PRODUCTS if empty
+
+const DEFAULT_PRODUCTS = [
+{
     id: "black-tee",
     name: "Raw Black T-Shirt Lineup",
     price: 3000,
@@ -174,22 +178,61 @@ const PRODUCTS = [
   },
 ];
 
+// ── Get all products (localStorage first, fallback to defaults) ──
+function getAllProducts() {
+  const stored = localStorage.getItem("ec_admin_products");
+  if (stored) {
+    const adminProds = JSON.parse(stored);
+    if (adminProds.length > 0) {
+      // Normalize admin products to match website product format
+      return adminProds.map(p => ({
+        id: p.id,
+        name: p.name,
+        price: parseFloat(p.price) || 0,
+        category: (p.category || "tshirts").toLowerCase().replace(/[^a-z]/g, ""),
+        colors: p.colors || ["#0a0a0a"],
+        colorNames: p.colorNames || ["Black"],
+        sizes: p.sizes || ["S", "M", "L", "XL"],
+        image: p.image || `https://placehold.co/400x400/1a1a1a/fff?text=${encodeURIComponent(p.name||"P")}`,
+        images: p.images || [p.image || `https://placehold.co/600x600/1a1a1a/fff?text=${encodeURIComponent(p.name||"P")}`],
+        rating: p.rating || 4.0,
+        reviews: p.reviews || 0,
+        inStock: p.stock !== "Out of Stock",
+        badge: p.badge || null,
+        description: p.description || "",
+        features: p.features || []
+      }));
+    }
+  }
+  return DEFAULT_PRODUCTS;
+}
+
+// Keep PRODUCTS as a live getter array proxy
+let PRODUCTS = getAllProducts();
+
+function refreshProducts() {
+  PRODUCTS = getAllProducts();
+}
+
 function getProductById(id) {
-  return PRODUCTS.find(p => p.id === id) || null;
+  return getAllProducts().find(p => p.id === id) || null;
 }
 
 function getProductsByCategory(cat) {
-  if (!cat || cat === "all") return PRODUCTS;
-  return PRODUCTS.filter(p => p.category === cat);
+  const all = getAllProducts();
+  if (!cat || cat === "all") return all;
+  return all.filter(p => p.category === cat);
 }
 
 function searchProducts(query) {
   const q = query.toLowerCase();
-  return PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+  return getAllProducts().filter(p =>
+    p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+  );
 }
 
 function getRelatedProducts(id, limit = 4) {
   const product = getProductById(id);
   if (!product) return [];
-  return PRODUCTS.filter(p => p.id !== id && p.category === product.category).slice(0, limit);
+  return getAllProducts().filter(p => p.id !== id && p.category === product.category).slice(0, limit);
 }

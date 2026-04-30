@@ -7,9 +7,9 @@ let selectedReviewStar = 0;
 let productReviews = [];
 
 const SAMPLE_REVIEWS = [
-  { name: "Emily Davis", date: "1 week ago", rating: 4, text: "This company always goes above and beyond to satisfy their customers." },
-  { name: "Daniel Smith", date: "1 months ago", rating: 4, text: "I can't believe how affordable and high-quality this item is!" },
-  { name: "Benjamin Clark", date: "3 weeks ago", rating: 4, text: "These guys know their craft and it shows in their products." },
+  { name: "Ahmed Bensalem", date: "1 week ago", rating: 4, text: "This company always goes above and beyond to satisfy their customers." },
+  { name: "Yasmine Khelifi", date: "1 months ago", rating: 4, text: "I can't believe how affordable and high-quality this item is!" },
+  { name: "Karim Meziane", date: "3 weeks ago", rating: 4, text: "These guys know their craft and it shows in their products." },
 ];
 
 function initProduct() {
@@ -67,7 +67,7 @@ function renderProduct() {
       </div>
 
       <h1 style="font-family:var(--font-serif);font-size:28px;font-weight:400;margin-bottom:12px;">${p.name}</h1>
-      <div class="product-price">${p.price.toFixed(2)}DA</div>
+      <div class="product-price">${p.price.toFixed(2)} DA</div>
       <div class="product-stock-badge" style="margin-bottom:20px;">${p.inStock ? "In Stock" : "Out of Stock"}</div>
 
       <!-- Colors -->
@@ -108,7 +108,7 @@ function renderProduct() {
       </div>
       <div class="product-shipping-note">
         <svg fill="none" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4-1-4 1"/></svg>
-        FREE SHIPPING ON ORDERS 5000DA+
+        FREE SHIPPING ON ORDERS 5000 DA+
       </div>
 
       <!-- Share -->
@@ -130,7 +130,7 @@ function renderProduct() {
   `;
 
   document.getElementById("product-breadcrumb").innerHTML = `
-    <a href="index.html">Ecommerce</a>
+    <a href="index.html">LuxStore</a>
     <span>›</span>
     <span>${p.name}</span>
   `;

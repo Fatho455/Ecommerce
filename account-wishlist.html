@@ -67,7 +67,7 @@
                   <div class="wishlist-item-info">
                     <div class="wishlist-item-name">${item.name}</div>
                     <div class="wishlist-item-date">Added ${new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</div>
-                    <div class="wishlist-item-price">Price: $${item.price?.toFixed(2) || "N/A"}</div>
+                    <div class="wishlist-item-price">Price: ${item.price?.toFixed(2) || "N/A"} DA</div>
                     <div class="wishlist-item-actions">
                       <button class="btn btn-primary" onclick="moveToCart('${item.id}')">Add to cart</button>
                       <button class="btn btn-outline" onclick="removeWishlistItem('${item.id}')">Remove</button>

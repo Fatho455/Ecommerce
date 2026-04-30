@@ -143,7 +143,7 @@ function toggleSizeFilter(btn) {
 
 function updatePriceFilter(val) {
   maxPrice = parseInt(val);
-  document.getElementById("price-display-val").textContent = `DA${val}`;
+  document.getElementById("price-display-val").textContent = `${val} DA`;
   applyFilters();
 }
 

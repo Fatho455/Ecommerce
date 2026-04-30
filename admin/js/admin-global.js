@@ -11,7 +11,7 @@ function renderAdminSidebar(activePage) {
   return `
     <aside class="admin-sidebar">
       <div class="admin-sidebar-logo">
-        <div class="admin-login-logo-icon">E</div>
+        <img src="assets/images/Vector.svg" alt="Logo" style="height:32px;" />
         Admin
       </div>
       <nav class="admin-nav">
@@ -72,14 +72,14 @@ function seedAdminData() {
   // Seed users if none
   if (!localStorage.getItem("ec_users")) {
     localStorage.setItem("ec_users", JSON.stringify([
-  {name: "Ahmed Benali",email: "ahmed.benali23@gmail.com",password: btoa("pass"),address: {street: "Cité 120 Logements",city: "Blida",state: "Blida",zip: "09000",country: "DZ"}},
-  {name: "Yasmine Kaci",email: "yasmine.kaci@gmail.com",password: btoa("pass"),address: {street: "Rue Didouche Mourad",city: "Alger",state: "Alger",zip: "16000",country: "DZ"}},
-  {name: "Sofiane Boudiaf",email: "sofiane.bdz@gmail.com",password: btoa("pass"),address: {street: "حي النصر",city: "Constantine",state: "Constantine",zip: "25000",country: "DZ"}},
-  {name: "Nour El Houda Meziane",email: "nour.meziane@gmail.com",password: btoa("pass"),address: {street: "حي 500 مسكن",city: "Oran",state: "Oran",zip: "31000",country: "DZ"}},
-  {name: "Karim Touati",email: "karim.touati19@gmail.com",password: btoa("pass"),address: {street: "حي بن بولعيد",city: "Batna",state: "Batna",zip: "05000",country: "DZ"}},
-  {name: "Imane Saadi",email: "imane.saadi@gmail.com",password: btoa("pass"),address: {street: "حي الزهور",city: "Sétif",state: "Sétif",zip: "19000",country: "DZ"}},
-  {name: "Walid Cherif",email: "walid.cherif@gmail.com",password: btoa("pass"),address: {street: "حي المستقبل",city: "Annaba",state: "Annaba",zip: "23000",country: "DZ"}},
-  {name: "Sara Hamdani",email: "sara.hamdani@gmail.com",password: btoa("pass"),address: {street: "حي السلام",city: "Tlemcen",state: "Tlemcen",zip: "13000",country: "DZ"}},
+      {name: "Ahmed Benali",email: "ahmed.benali23@gmail.com",password: btoa("pass"),address: {street: "Cité 120 Logements",city: "Blida",state: "Blida",zip: "09000",country: "DZ"}},
+      {name: "Yasmine Kaci",email: "yasmine.kaci@gmail.com",password: btoa("pass"),address: {street: "Rue Didouche Mourad",city: "Alger",state: "Alger",zip: "16000",country: "DZ"}},
+      {name: "Sofiane Boudiaf",email: "sofiane.bdz@gmail.com",password: btoa("pass"),address: {street: "حي النصر",city: "Constantine",state: "Constantine",zip: "25000",country: "DZ"}},
+      {name: "Nour El Houda Meziane",email: "nour.meziane@gmail.com",password: btoa("pass"),address: {street: "حي 500 مسكن",city: "Oran",state: "Oran",zip: "31000",country: "DZ"}},
+      {name: "Karim Touati",email: "karim.touati19@gmail.com",password: btoa("pass"),address: {street: "حي بن بولعيد",city: "Batna",state: "Batna",zip: "05000",country: "DZ"}},
+      {name: "Imane Saadi",email: "imane.saadi@gmail.com",password: btoa("pass"),address: {street: "حي الزهور",city: "Sétif",state: "Sétif",zip: "19000",country: "DZ"}},
+      {name: "Walid Cherif",email: "walid.cherif@gmail.com",password: btoa("pass"),address: {street: "حي المستقبل",city: "Annaba",state: "Annaba",zip: "23000",country: "DZ"}},
+      {name: "Sara Hamdani",email: "sara.hamdani@gmail.com",password: btoa("pass"),address: {street: "حي السلام",city: "Tlemcen",state: "Tlemcen",zip: "13000",country: "DZ"}},
     ]));
   }
 
@@ -100,14 +100,14 @@ function seedAdminData() {
   // Seed reviews if none
   if (!localStorage.getItem("ec_reviews")) {
     localStorage.setItem("ec_reviews", JSON.stringify([
-  {name: "Ahmed Benali",initials: "AB", review: "Produit top, qualité مليحة بزاف والتوصيل كان سريع.",rating: 5},
-  {name: "Yasmine Kaci",initials: "YK",review: "الخدمة مليحة بصح livraison تأخرت شوية.",rating: 4},
-  {name: "Sofiane Boudiaf",initials: "SB",review: "Franchement, produit عادي، كنت متوقع خير من هكذا.",rating: 3},
-  {name: "Nour Meziane",initials: "NM",review: "Support كان متعاون بزاف، المشكلة تتحلت بسرعة.",rating: 5},
-  {name: "Karim Touati",initials: "KT",review: "Bon rapport qualité/prix، يستاهل التجربة.",rating: 4},
-  {name: "Imane Saadi",initials: "IS",review: "ما عجبنيش بزاف، كاين نقص في الجودة.",rating: 2},
-  {name: "Walid Cherif",initials: "WC",review: "Good experience overall, نقدر نعاود نطلب.",rating: 4},
-  {name: "Sara Hamdani",initials: "SH",review: "Service professionnel وتعامل راقي، merci !",rating: 5},
+      {name: "Ahmed Benali",initials: "AB", review: "Produit top, qualité مليحة بزاف والتوصيل كان سريع.",rating: 5},
+      {name: "Yasmine Kaci",initials: "YK",review: "الخدمة مليحة بصح livraison تأخرت شوية.",rating: 4},
+      {name: "Sofiane Boudiaf",initials: "SB",review: "Franchement, produit عادي، كنت متوقع خير من هكذا.",rating: 3},
+      {name: "Nour Meziane",initials: "NM",review: "Support كان متعاون بزاف، المشكلة تتحلت بسرعة.",rating: 5},
+      {name: "Karim Touati",initials: "KT",review: "Bon rapport qualité/prix، يستاهل التجربة.",rating: 4},
+      {name: "Imane Saadi",initials: "IS",review: "ما عجبنيش بزاف، كاين نقص في الجودة.",rating: 2},
+      {name: "Walid Cherif",initials: "WC",review: "Good experience overall, نقدر نعاود نطلب.",rating: 4},
+      {name: "Sara Hamdani",initials: "SH",review: "Service professionnel وتعامل راقي، merci !",rating: 5},
     ]));
   }
 }

@@ -34,7 +34,7 @@ function renderOrders() {
           <div style="font-size:12px;color:var(--admin-gray-400);">${o.id}</div>
         </td>
         <td style="color:var(--admin-gray-500);">${o.date}</td>
-        <td style="font-weight:600;">$${(o.total || 0).toFixed(2)}</td>
+        <td style="font-weight:600;">${(o.total || 0).toFixed(2)} DA</td>
         <td>
           <select onchange="updateOrderStatus('${o.id}', this.value)"
             style="padding:4px 8px;border:1.5px solid var(--admin-gray-200);border-radius:20px;font-size:12px;font-weight:600;background:white;cursor:pointer;">

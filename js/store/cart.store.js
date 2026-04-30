@@ -47,7 +47,7 @@ function getCartTotal() {
   const cart = getCart();
   const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const tax = parseFloat((subtotal * 0.03).toFixed(2));
-  const shipping = subtotal >= 5000 ? 0 : 500;
+ const shipping = subtotal >= 5000 ? 0 : 250;
   const total = parseFloat((subtotal + tax + shipping).toFixed(2));
   return { subtotal: parseFloat(subtotal.toFixed(2)), tax, shipping, total };
 }

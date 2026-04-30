@@ -13,9 +13,10 @@ function renderCheckoutSummary() {
   const rows = document.getElementById("checkout-summary-rows");
   if (rows) {
     rows.innerHTML = `
-      <div class="summary-row"><span>Subtotal</span><span>${subtotal.toFixed(2)}DA</span></div>
-<div class="summary-row"><span>Shipping:</span><span class="free">${shipping === 0 ? "Free" : shipping.toFixed(2) + " DA"}</span></div>      <div class="summary-row"><span>Tax:</span><span>${tax.toFixed(2)}DA</span></div>
-      <div class="summary-row total"><span>Total</span><span>${total.toFixed(2)}DA</span></div>`;
+      <div class="summary-row"><span>Subtotal</span><span>${subtotal.toFixed(2)} DA</span></div>
+      <div class="summary-row"><span>Shipping:</span><span class="free">${shipping === 0 ? "Free" : "${shipping.toFixed(2)} DA"}</span></div>
+      <div class="summary-row"><span>Tax:</span><span>${tax.toFixed(2)} DA</span></div>
+      <div class="summary-row total"><span>Total</span><span>${total.toFixed(2)} DA</span></div>`;
   }
 
   // Pre-fill from user profile

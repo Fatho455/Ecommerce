@@ -34,10 +34,10 @@ function renderCartPage() {
       </div>
       <div class="order-summary">
         <h3>Order Summary</h3>
-        <div class="summary-row"><span>Subtotal</span><span>${subtotal.toFixed(2)}DA</span></div>
-        <div class="summary-row"><span>Shipping:</span><span class="free">${shipping === 0 ? "Free" : "DA" + shipping.toFixed(2)}</span></div>
-        <div class="summary-row"><span>Tax:</span><span>${tax.toFixed(2)}DA</span></div>
-        <div class="summary-row total"><span>Total</span><span>${total.toFixed(2)}DA</span></div>
+        <div class="summary-row"><span>Subtotal</span><span>${subtotal.toFixed(2)} DA</span></div>
+        <div class="summary-row"><span>Shipping:</span><span class="free">${shipping === 0 ? "Free" : shipping.toFixed(2) + " DA"}</span></div>
+        <div class="summary-row"><span>Tax:</span><span>${tax.toFixed(2)} DA</span></div>
+        <div class="summary-row total"><span>Total</span><span>${total.toFixed(2)} DA</span></div>
         <a href="checkout.html" class="btn btn-primary">Checkout</a>
         <a href="listing.html" class="btn btn-ghost w-full" style="margin-top:8px;text-align:center;">Continue Shopping</a>
       </div>
@@ -58,13 +58,13 @@ function renderCartItem(item) {
           </div>
         </div>
       </div>
-      <div class="cart-item-price">${item.price.toFixed(2)}DA</div>
+      <div class="cart-item-price">${item.price.toFixed(2)} DA</div>
       <div class="qty-stepper">
         <button class="qty-btn" onclick="handleQtyChange('${item.id}','${item.color}','${item.size}',-1)">−</button>
         <div class="qty-value">${item.qty}</div>
         <button class="qty-btn" onclick="handleQtyChange('${item.id}','${item.color}','${item.size}',1)">+</button>
       </div>
-      <div class="cart-item-total">${(item.price * item.qty).toFixed(2)}DA</div>
+      <div class="cart-item-total">${(item.price * item.qty).toFixed(2)} DA</div>
       <button class="cart-remove-btn" onclick="handleRemove('${item.id}','${item.color}','${item.size}')" title="Remove">
         <svg fill="none" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/>

@@ -7,6 +7,47 @@
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/account.css" />
+  <style>
+    .avatar-upload-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar-preview {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--gray-200);
+      background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 700;
+      color: var(--gray-500);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .avatar-preview:hover { border-color: var(--black); }
+    .avatar-preview img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .avatar-upload-btns { display: flex; gap: 8px; }
+    .avatar-upload-label {
+      padding: 8px 16px;
+      background: var(--black); color: var(--white);
+      border-radius: var(--radius); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background 0.18s;
+    }
+    .avatar-upload-label:hover { background: #333; }
+    .avatar-remove-btn {
+      padding: 8px 16px;
+      background: var(--gray-100); color: var(--gray-600);
+      border-radius: var(--radius); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.18s; border: none;
+    }
+    .avatar-remove-btn:hover { background: #fef2f2; color: #dc2626; }
+    .avatar-hint { font-size: 12px; color: var(--gray-400); text-align: center; }
+  </style>
 </head>
 <body>
   <div class="page-wrapper">
@@ -24,13 +65,19 @@
       </div>
 
       <div class="container account-page">
-        <h1 style="font-family:var(--font-serif);font-size:28px;font-weight:400;padding:24px 0 0;">My Account</h1>
+        <h1 style="font-family:var(--font-serif);font-size:28px;font-weight:400;padding:24px 0 0;">
+          My Account
+        </h1>
         <div class="account-layout" id="account-layout"></div>
       </div>
     </main>
 
     <div id="footer-placeholder"></div>
   </div>
+
+  <!-- Hidden file input -->
+  <input type="file" id="avatar-file-input" accept="image/*"
+    style="display:none" onchange="handleAvatarUpload(event)" />
 
   <script src="js/store/cart.store.js"></script>
   <script src="js/store/wishlist.store.js"></script>
@@ -41,43 +88,100 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       requireAuth();
+      renderDetailPage();
+    });
+
+    function renderDetailPage() {
       const user = getUser();
+      const avatar = user?.avatar || null;
+      const initials = (user?.name || "U")[0].toUpperCase();
       const layout = document.getElementById("account-layout");
+
       layout.innerHTML = renderAccountSidebar("detail") + `
         <div class="account-content">
           <h2>Account Details</h2>
-          <div class="detail-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
-            <!-- Left: basic info -->
-            <form class="detail-form" onsubmit="saveDetail(event)">
-              <div class="form-group">
-                <label class="form-label">Full name</label>
-                <input type="text" class="form-input" id="detail-name" value="${user?.name || ""}" placeholder="Youcef Daho" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" id="detail-email" value="${user?.email || ""}" placeholder="you@example.com" />
-              </div>
-              <div class="save-btn-row">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+
+            <!-- Left: info form -->
+            <form onsubmit="saveDetail(event)">
+              <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Full name</label>
+                  <input type="text" class="form-input" id="detail-name"
+                    value="${user?.name || ""}" placeholder="John Doe" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-input" id="detail-email"
+                    value="${user?.email || ""}" placeholder="you@example.com" />
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
               </div>
             </form>
-            <!-- Right: profile picture placeholder -->
-            <div>
-              <div style="font-size:13px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">Profile Picture</div>
-              <div style="width:96px;height:96px;border-radius:50%;background:var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:var(--gray-500);margin-bottom:16px;">
-                ${(user?.name || "U")[0].toUpperCase()}
+
+            <!-- Right: avatar upload -->
+            <div class="avatar-upload-wrap">
+              <div class="avatar-preview" id="avatar-preview-box"
+                onclick="document.getElementById('avatar-file-input').click()"
+                title="Click to change photo">
+                ${avatar
+                  ? `<img src="${avatar}" alt="Profile" id="avatar-img" />`
+                  : `<span id="avatar-initials">${initials}</span>`}
               </div>
-              <button class="btn btn-outline" style="font-size:13px;padding:8px 16px;">Change Photo</button>
+              <div class="avatar-hint">Click photo to change · Max 2MB</div>
+              <div class="avatar-upload-btns">
+                <label for="avatar-file-input" class="avatar-upload-label">
+                  Change Photo
+                </label>
+                <button type="button" class="avatar-remove-btn"
+                  onclick="removeAvatar()">Remove</button>
+              </div>
             </div>
+
           </div>
         </div>`;
-    });
+    }
+
+    function handleAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Image too large. Max 2MB.", "error");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        // Save to user profile
+        updateUserField({ avatar: dataUrl });
+        // Update preview box
+        const box = document.getElementById("avatar-preview-box");
+        box.innerHTML = `<img src="${dataUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;display:block;" />`;
+        // Update navbar avatar immediately
+        updateNavAvatar();
+        showToast("Profile picture updated!", "success");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAvatar() {
+      updateUserField({ avatar: null });
+      const user = getUser();
+      const initials = (user?.name || "U")[0].toUpperCase();
+      const box = document.getElementById("avatar-preview-box");
+      box.innerHTML = `<span id="avatar-initials">${initials}</span>`;
+      updateNavAvatar();
+      showToast("Profile picture removed.", "info");
+    }
 
     function saveDetail(e) {
       e.preventDefault();
       const name = document.getElementById("detail-name").value.trim();
       const email = document.getElementById("detail-email").value.trim();
       updateUserField({ name, email });
+      updateNavAvatar();
       showToast("Account details saved!", "success");
     }
   </script>

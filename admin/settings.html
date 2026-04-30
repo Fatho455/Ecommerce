@@ -17,11 +17,11 @@
           <div class="settings-form">
             <div class="admin-form-group">
               <label class="admin-form-label">Site Name</label>
-              <input type="text" class="admin-form-input" id="s-name" placeholder="Ecommerce" style="max-width:360px;" />
+              <input type="text" class="admin-form-input" id="s-name" placeholder="LuxStore" style="max-width:360px;" />
             </div>
             <div class="admin-form-group">
               <label class="admin-form-label">Support Email</label>
-              <input type="email" class="admin-form-input" id="s-email" placeholder="hello@ecommerce.com" style="max-width:360px;" />
+              <input type="email" class="admin-form-input" id="s-email" placeholder="support@ecommerce.dz" style="max-width:360px;" />
             </div>
             <div class="admin-form-group">
               <label class="admin-form-label">Monthly Order Goal</label>
@@ -39,8 +39,8 @@
   <script>
     function loadSettings() {
       const s = JSON.parse(localStorage.getItem("ec_settings") || "{}");
-      document.getElementById("s-name").value = s.siteName || "Ecommerce";
-      document.getElementById("s-email").value = s.supportEmail || "hello@ecommerce.com";
+      document.getElementById("s-name").value = s.siteName || "LuxStore";
+      document.getElementById("s-email").value = s.supportEmail || "support@ecommerce.dz";
       document.getElementById("s-goal").value = s.monthlyGoal || 1000;
     }
 
